@@ -1,26 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Navbar from './Navbar';
+import EntitySearch from './EntitySearch';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const competitorSearch = new EntitySearch({ name: "Competitor", enabled: true });
+    const competitionSearch = new EntitySearch({ name: "Competition", enabled: false });
+    return (
+        <div className="App">
+            <Navbar />
+            <div className="columns">
+                <div className="column">
+                    { competitorSearch.render() }
+                </div>
+                <div className="column">
+                    { competitionSearch.render() }
+                </div>
+            </div>
+        </div>
+    );
 }
 
 export default App;
