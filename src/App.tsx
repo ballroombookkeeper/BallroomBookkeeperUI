@@ -3,17 +3,15 @@ import Navbar from './Navbar';
 import EntitySearch from './EntitySearch';
 
 function App() {
-    const competitorSearch = new EntitySearch({ name: "Competitor", enabled: true });
-    const competitionSearch = new EntitySearch({ name: "Competition", enabled: false });
     return (
         <div className="App">
             <Navbar />
             <div className="columns">
                 <div className="column">
-                    { competitorSearch.render() }
+                    <EntitySearch name={"Competitor"} enabled={true} />
                 </div>
                 <div className="column">
-                    { competitionSearch.render() }
+                    <EntitySearch name={"Competition"} enabled={false} />
                 </div>
             </div>
         </div>
