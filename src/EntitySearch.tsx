@@ -13,6 +13,8 @@ interface IProps {
 interface IState {
     name: string;
     enabled: boolean;
+    text: string;
+    showList: boolean;
     list: Entity[]
 }
 
@@ -22,6 +24,8 @@ class EntitySearch extends React.Component<IProps, IState> {
         this.state = {
             name: props.name,
             enabled: props.enabled,
+            text: '',
+            showList: false,
             list: []
         };
     }
@@ -32,6 +36,7 @@ class EntitySearch extends React.Component<IProps, IState> {
 
     handleInput(inp: React.FormEvent<HTMLInputElement>) {
         const searchTerm = (inp.target as unknown as {value:string}).value;
+        this.setState({showList: true, text: searchTerm});
         this.updateList(searchTerm);
     }
 
@@ -44,9 +49,16 @@ class EntitySearch extends React.Component<IProps, IState> {
                     { this.state.name } Search
                 </label>
                 <div className="control">
-                    <input id={ lowerName + "-name-input" } className="input" type="text" placeholder={ placeholder } onInput={(inp) => this.handleInput(inp)} />
+                    <input
+                        id={ lowerName + "-name-input" }
+                        className="input"
+                        type="text"
+                        placeholder={ placeholder }
+                        onInput={(inp) => this.handleInput(inp)}
+                        onBlur={() => this.setState({showList: false})}
+                        onFocus={() => this.setState({showList: true})}/>
                 </div>
-                { this.state.list.map(entity => <a className="button is-fullwidth" href={`/${lowerName}/?id=${entity.id}`}>{entity.name}</a>)}
+                { this.state.list.filter(_ => this.state.showList).map(entity => <a className="button is-fullwidth" href={`/${lowerName}/?id=${entity.id}`}>{entity.name}</a>) }
             </div>;
         return (
             <form method="GET" id={ lowerName + "-search-form" }>
