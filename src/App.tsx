@@ -11,7 +11,7 @@ function App() {
                     <EntitySearch name={"Competitor"} enabled={true} />
                 </div>
                 <div className="column">
-                    <EntitySearch name={"Competition"} enabled={false} />
+                    <EntitySearch name={"Competition"} enabled={true} />
                 </div>
             </div>
         </div>

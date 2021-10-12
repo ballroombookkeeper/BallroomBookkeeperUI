@@ -1,5 +1,10 @@
 import React from 'react';
 
+interface Entity {
+    id: number;
+    name: string;
+}
+
 interface IProps {
     name: string;
     enabled: boolean;
@@ -8,7 +13,7 @@ interface IProps {
 interface IState {
     name: string;
     enabled: boolean;
-    list: string[]
+    list: Entity[]
 }
 
 class EntitySearch extends React.Component<IProps, IState> {
@@ -21,18 +26,13 @@ class EntitySearch extends React.Component<IProps, IState> {
         };
     }
 
+    componentDidMount() {
+        this.updateList();
+    }
+
     handleInput(inp: React.FormEvent<HTMLInputElement>) {
         const searchTerm = (inp.target as unknown as {value:string}).value;
-        console.log("Searching for " + searchTerm);
-        fetch('/api/competitors?search=' + searchTerm) // TODO: use appropriate api per entity
-            .then(res => res.json())
-            .then((res) => {
-                console.log(res);
-                this.setState(() => {
-                    return { list: res.map((comp: any) => comp.competitor_name)};
-                });
-            })
-            .catch(err => console.log(err));
+        this.updateList(searchTerm);
     }
 
     render() {
@@ -46,13 +46,32 @@ class EntitySearch extends React.Component<IProps, IState> {
                 <div className="control">
                     <input id={ lowerName + "-name-input" } className="input" type="text" placeholder={ placeholder } onInput={(inp) => this.handleInput(inp)} />
                 </div>
-                { this.state.list.map(name => <p>{name}</p>) /* TODO: Make these links */}
+                { this.state.list.map(entity => <a className="button is-fullwidth" href={`/${lowerName}/?id=${entity.id}`}>{entity.name}</a>)}
             </div>;
         return (
             <form method="GET" id={ lowerName + "-search-form" }>
                 { this.state.enabled ? field : <fieldset disabled>{field}</fieldset> }
             </form>
         );
+    }
+
+    private updateList(search?: string) {
+        if (!search) {
+            this.setState(() => { return { list: [] }});
+            return;
+        }
+
+        const apiName = this.state.name.toLowerCase();
+        console.log("Searching for " + search);
+        fetch(`/api/${apiName}s?search=${search}`)
+            .then(res => res.json())
+            .then((res) => {
+                console.log(res);
+                this.setState(() => {
+                    return { list: res.map((entity: any) => { return { id: entity[`${apiName}_id`], name: entity[`${apiName}_name`] } })};
+                });
+            })
+            .catch(err => console.log(err));
     }
 }
 
