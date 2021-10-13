@@ -57,8 +57,12 @@ class EntitySearch extends React.Component<IProps, IState> {
                         onInput={(inp) => this.handleInput(inp)}
                         onBlur={() => this.setState({showList: false})}
                         onFocus={() => this.setState({showList: true})}/>
+                    <div style={{"zIndex": 5000, "position": "absolute", "width": "100%", "visibility": this.state.showList ? 'visible' : 'hidden'}}>
+                        <ul>
+                            { this.state.list.map(entity => <li><a className="button is-white is-fullwidth" href={`/${lowerName}/?id=${entity.id}`}>{entity.name}</a></li>) }
+                        </ul>
+                    </div>
                 </div>
-                { this.state.list.filter(_ => this.state.showList).map(entity => <a className="button is-fullwidth" href={`/${lowerName}/?id=${entity.id}`}>{entity.name}</a>) }
             </div>;
         return (
             <form method="GET" id={ lowerName + "-search-form" }>
