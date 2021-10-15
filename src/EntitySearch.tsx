@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './EntitySearch.css';
+
 interface Entity {
     id: number;
     name: string;
@@ -68,7 +70,7 @@ class EntitySearch extends React.Component<IProps, IState> {
                     <div style={{"zIndex": 5000, "position": "absolute", "width": "100%", "visibility": this.state.showList ? 'visible' : 'hidden'}}>
                         <ul>
                             { this.state.list.map((entity, idx) => {
-                                const stylingClasses = `button is-fullwidth ${idx === this.state.selected ? "is-light" : "is-white"}`;
+                                const stylingClasses = `button button-dropdown is-fullwidth ${idx === this.state.selected ? "is-selected" : "is-unselected"}`;
                                 return <li>
                                     <a className={stylingClasses} href={`/${lowerName}/?id=${entity.id}`}>
                                         {entity.name}

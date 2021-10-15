@@ -1,0 +1,14 @@
+.button-dropdown {
+    border-radius: 0;
+    justify-content: left;
+    border-color: transparent;
+    color: #000000;
+}
+
+.is-selected {
+    background-color: #cdcdcd;
+}
+
+.is-unselected {
+    background-color: #e3e3e3;
+}
