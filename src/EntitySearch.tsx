@@ -28,6 +28,9 @@ const KEY = {
 }
 
 class EntitySearch extends React.Component<IProps, IState> {
+
+    private wrapperRef: React.RefObject<HTMLDivElement>;
+
     constructor(props: IProps) {
         super(props);
         this.state = {
@@ -38,35 +41,34 @@ class EntitySearch extends React.Component<IProps, IState> {
             selected: -1,
             list: []
         };
+        this.wrapperRef = React.createRef();
     }
 
     componentDidMount() {
+        document.addEventListener('mousedown', this.handleClickOutside.bind(this));
         this.updateList();
     }
 
-    handleInput(inp: React.FormEvent<HTMLInputElement>) {
-        const searchTerm = (inp.target as unknown as {value:string}).value;
-        this.setState({showList: true, text: searchTerm});
-        this.updateList(searchTerm);
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClickOutside.bind(this));
     }
 
     render() {
         const placeholder = this.state.name + " Name";
         const lowerName = this.state.name.toLowerCase();
         const field =
-            <div className="field">
+            <div className="field" ref={this.wrapperRef}>
                 <label className="label">
                     { this.state.name } Search
                 </label>
-                <div className="control">
+                <div className="control" tabIndex={0}
+                    onFocus={() => this.setState({showList: true})}>
                     <input
                         id={ lowerName + "-name-input" }
                         className="input"
                         type="text"
                         placeholder={ placeholder }
                         onInput={(inp) => this.handleInput(inp)}
-                        onBlur={() => this.setState({showList: false})}
-                        onFocus={() => this.setState({showList: true})}
                         onKeyDown={(event) => this.updateSelection(event)}/>
                     <div style={{"zIndex": 5000, "position": "absolute", "width": "100%", "visibility": this.state.showList ? 'visible' : 'hidden'}}>
                         <ul>
@@ -88,6 +90,17 @@ class EntitySearch extends React.Component<IProps, IState> {
         );
     }
 
+    private handleInput(inp: React.FormEvent<HTMLInputElement>) {
+        const searchTerm = (inp.target as unknown as {value:string}).value;
+        this.setState({showList: true, text: searchTerm});
+        this.updateList(searchTerm);
+    }
+
+    private handleClickOutside(event: MouseEvent): void {
+        if (this.wrapperRef && this.wrapperRef.current && !this.wrapperRef.current.contains(event?.target as Node)) {
+            this.setState({showList: false})
+        }
+    }
     private updateSelection(event: React.KeyboardEvent) {
         const selectedIdx = this.state.selected;
         switch (event.key) {
