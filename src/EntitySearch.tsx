@@ -11,9 +11,6 @@ interface IProps {
 }
 
 interface IState {
-    name: string;
-    enabled: boolean;
-
     text: string;
     showList: boolean;
     selected: number;
@@ -34,8 +31,6 @@ class EntitySearch extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
         this.state = {
-            name: props.name,
-            enabled: props.enabled,
             text: '',
             showList: false,
             selected: -1,
@@ -54,12 +49,12 @@ class EntitySearch extends React.Component<IProps, IState> {
     }
 
     render() {
-        const placeholder = this.state.name + " Name";
-        const lowerName = this.state.name.toLowerCase();
+        const placeholder = this.props.name + " Name";
+        const lowerName = this.props.name.toLowerCase();
         const field =
             <div className="field" ref={this.wrapperRef}>
                 <label className="label">
-                    { this.state.name } Search
+                    { this.props.name } Search
                 </label>
                 <div className="control" tabIndex={0}
                     onFocus={() => this.setState({showList: true})}>
@@ -85,7 +80,7 @@ class EntitySearch extends React.Component<IProps, IState> {
             </div>;
         return (
             <form method="GET" id={ lowerName + "-search-form" }>
-                { this.state.enabled ? field : <fieldset disabled>{field}</fieldset> }
+                { this.props.enabled ? field : <fieldset disabled>{field}</fieldset> }
             </form>
         );
     }
@@ -133,7 +128,7 @@ class EntitySearch extends React.Component<IProps, IState> {
             return;
         }
 
-        const apiName = this.state.name.toLowerCase();
+        const apiName = this.props.name.toLowerCase();
         console.log("Searching for " + search);
         fetch(`/api/${apiName}s?search=${search}`)
             .then(res => res.json())
