@@ -40,7 +40,7 @@ function App() {
                         <Route path="/competition/:id">
                             <EntityPage />
                         </Route>
-                        <Route path="/">
+                        <Route exact path="/">
                             <Home />
                         </Route>
                         <Route path="*">
