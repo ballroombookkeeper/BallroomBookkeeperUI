@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import './EntitySearch.css';
 
@@ -72,9 +73,7 @@ class EntitySearch extends React.Component<IProps, IState> {
                             { this.state.list.map((entity, idx) => {
                                 const stylingClasses = `button button-dropdown is-fullwidth ${idx === this.state.selected ? "is-selected" : "is-unselected"}`;
                                 return <li>
-                                    <a className={stylingClasses} href={`/${lowerName}/?id=${entity.id}`}>
-                                        {entity.name}
-                                    </a>
+                                    <Link className={stylingClasses} to={`/${lowerName}/${entity.id}`}>{entity.name}</Link>
                                 </li>}) }
                         </ul>
                     </div>
@@ -115,7 +114,7 @@ class EntitySearch extends React.Component<IProps, IState> {
                 event.preventDefault();
                 if (selectedIdx >= 0) {
                     const selected = this.state.list[selectedIdx];
-                    const href = `/${this.props.name.toLowerCase()}/?id=${selected.id}`;
+                    const href = `/${this.props.name.toLowerCase()}/${selected.id}`;
                     window.location.href = href;
                 }
                 break;

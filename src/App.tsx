@@ -1,28 +1,27 @@
 import './App.css';
-import Footer from './Footer';
-import Navbar from './Navbar';
-import EntitySearch from './EntitySearch';
+
+import Footer from './components/Footer';
+import Navbar from './components/Navbar';
+import About from './About';
+import Home from './Home';
+import NotFound from './404';
+
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+  useParams
 } from "react-router-dom";
 
-function Home() {
-    return ( 
-        <div className="columns">
-            <div className="column">
-                <EntitySearch name={"Competitor"} enabled={true} />
-            </div>
-            <div className="column">
-                <EntitySearch name={"Competition"} enabled={true} />
-            </div>
+function EntityPage() {
+    // TODO: Make this a full-fledged page and make separate class per entity
+    // This is just for stubbing
+    let params = useParams() as unknown as { id: number };
+    return (
+        <div>
+            ID: { params.id }
         </div>
     );
-}
-
-function About() {
-    return <h2>About</h2>;
 }
 
 function App() {
@@ -35,8 +34,17 @@ function App() {
                         <Route path="/about">
                             <About />
                         </Route>
+                        <Route path="/competitor/:id">
+                            <EntityPage />
+                        </Route>
+                        <Route path="/competition/:id">
+                            <EntityPage />
+                        </Route>
                         <Route path="/">
                             <Home />
+                        </Route>
+                        <Route path="*">
+                            <NotFound />
                         </Route>
                     </Switch>
                 </section>
