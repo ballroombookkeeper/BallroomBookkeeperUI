@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
 
 import './EntitySearch.css';
 
@@ -8,10 +8,12 @@ interface Entity {
     name: string;
 }
 
-interface IProps {
+interface EntitySearchProps {
     name: string;
     enabled: boolean;
 }
+
+type IProps = RouteComponentProps & EntitySearchProps;
 
 interface IState {
     text: string;
@@ -115,7 +117,7 @@ class EntitySearch extends React.Component<IProps, IState> {
                 if (selectedIdx >= 0) {
                     const selected = this.state.list[selectedIdx];
                     const href = `/${this.props.name.toLowerCase()}/${selected.id}`;
-                    window.location.href = href;
+                    this.props.history.push(href);
                 }
                 break;
             default:
@@ -143,4 +145,4 @@ class EntitySearch extends React.Component<IProps, IState> {
     }
 }
 
-export default EntitySearch;
+export default withRouter(EntitySearch);
